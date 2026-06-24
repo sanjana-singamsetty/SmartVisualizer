@@ -1,4 +1,5 @@
 import { Skeleton } from "@mantine/core";
+import ReactMarkdown from "react-markdown";
 import { useRepo } from "../context/RepoContext";
 
 const VIEW_TITLES = {
@@ -33,7 +34,9 @@ export default function AiOverviewBanner({ view }) {
       <div className="overview-banner__blob" style={{ background: blob }} />
       <div className="overview-banner__blob-dots" />
       <p className="overview-banner__title">{title}</p>
-      <p className="overview-banner__body">{summary}</p>
+      <div className="overview-banner__body md-body">
+        <ReactMarkdown>{summary}</ReactMarkdown>
+      </div>
     </div>
   );
 }

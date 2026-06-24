@@ -1,16 +1,17 @@
-import { Tabs, Center, Text } from "@mantine/core";
+import { Tabs } from "@mantine/core";
 import {
   IconFolderFilled, IconGitCommit, IconGitBranch,
   IconBulb, IconMessageCircle, IconFileText,
 } from "@tabler/icons-react";
 import { useRepo } from "../../context/RepoContext";
 import AiOverviewBanner from "../AiOverviewBanner";
-import StructureView   from "../views/StructureView";
-import CommitsView     from "../views/CommitsView";
-import BranchesView    from "../views/BranchesView";
-import InsightsView    from "../views/InsightsView";
-import ChatView        from "../views/ChatView";
-import ReadmeView      from "../views/ReadmeView";
+import StructureView from "../views/StructureView";
+import CommitsView   from "../views/CommitsView";
+import BranchesView  from "../views/BranchesView";
+import InsightsView  from "../views/InsightsView";
+import ChatView      from "../views/ChatView";
+import ReadmeView    from "../views/ReadmeView";
+import HelpView      from "../views/HelpView";
 
 const TABS = [
   { value: "structure", label: "Structure", Icon: IconFolderFilled,    showBanner: true  },
@@ -34,13 +35,7 @@ export default function TabSwitcher() {
   const { activeTab, setActiveTab, repoData, loading } = useRepo();
 
   if (!repoData && !loading) {
-    return (
-      <Center h="60vh">
-        <Text c="dimmed" size="sm">
-          Paste a GitHub repo URL above and click Analyze to get started.
-        </Text>
-      </Center>
-    );
+    return <HelpView />;
   }
 
   return (

@@ -138,4 +138,159 @@ body {
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 4px;
+  margin-top: 0;
+}
+
+/* ── Help / Landing page ────────────────────────────────────────── */
+.help-root {
+  padding: 8px 0 40px;
+}
+
+/* Hero */
+.help-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #0d1117;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.12) 1px, transparent 1px);
+  background-size: 56px 56px;
+  padding: 60px 48px 56px;
+  margin-bottom: 32px;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+}
+
+.help-hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.help-hero__blob--1 {
+  width: 320px; height: 320px;
+  background: #7c3aed;
+  top: -80px; right: 60px;
+}
+.help-hero__blob--2 {
+  width: 240px; height: 240px;
+  background: #db2777;
+  bottom: -60px; right: 180px;
+}
+.help-hero__blob--3 {
+  width: 180px; height: 180px;
+  background: #0ea5e9;
+  top: 20px; right: 340px;
+}
+
+.help-hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.help-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #c084fc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.help-hero__title {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #f8fafc;
+  margin: 0 0 16px;
+  letter-spacing: -1px;
+}
+
+.help-hero__title--accent {
+  background: linear-gradient(135deg, #c084fc 0%, #f472b6 50%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.help-hero__sub {
+  font-size: 16px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 480px;
+}
+
+/* Feature grid */
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .help-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 580px) {
+  .help-grid { grid-template-columns: 1fr; }
+  .help-hero__title { font-size: 32px; }
+}
+
+.help-card {
+  background: var(--card-bg);
+  border: 1.5px solid color-mix(in srgb, var(--card-color) 20%, transparent);
+  border-radius: 18px;
+  padding: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+}
+
+.help-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--card-color) 18%, transparent);
+}
+
+.help-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card-color) 14%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.help-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.help-card__desc {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Bottom hint */
+.help-hint {
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
 }

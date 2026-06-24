@@ -1,0 +1,32 @@
+{
+  "name": "smart-visualizer-client",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/core": "^7.11.0",
+    "@mantine/hooks": "^7.11.0",
+    "@mantine/notifications": "^7.11.0",
+    "@tabler/icons-react": "^3.11.0",
+    "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
+    "chartjs-plugin-zoom": "^2.0.1",
+    "hammerjs": "^2.0.8",
+    "d3": "^7.9.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "postcss": "^8.4.39",
+    "vite": "^5.3.4"
+  }
+}

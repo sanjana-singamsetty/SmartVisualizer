@@ -1,0 +1,57 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+
+import repoRouter    from "./routes/repo.js";
+import overviewRouter from "./routes/overview.js";
+import contextRouter from "./routes/context.js";
+import debateRouter  from "./routes/debate.js";
+import jobsRouter    from "./routes/jobs.js";
+import chatRouter    from "./routes/chat.js";
+import readmeRouter  from "./routes/readme.js";
+import scoreRouter   from "./routes/score.js";
+import agentRouter   from "./routes/agent.js";
+
+const app = express();
+
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://localhost:4173",
+  // Add your Vercel URL here once deployed, e.g.:
+  // "https://smart-visualizer.vercel.app",
+  process.env.FRONTEND_URL, // set in Render env vars
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // Allow requests with no origin (curl, Render health checks)
+    if (!origin || ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return cb(null, true);
+    cb(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+}));
+app.use(express.json());
+
+// Routes
+app.use("/api/repo",     repoRouter);
+app.use("/api/overview", overviewRouter);
+app.use("/api/context",  contextRouter);
+app.use("/api/debate",   debateRouter);
+app.use("/api/jobs",     jobsRouter);
+app.use("/api/chat",     chatRouter);
+app.use("/api/readme",   readmeRouter);
+app.use("/api/score",    scoreRouter);
+app.use("/api/agent",    agentRouter);
+
+// Health check
+app.get("/api/health", (_req, res) => res.json({ ok: true }));
+
+// MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB error:", err));
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

@@ -1,0 +1,51 @@
+# render.yaml — Render Blueprint for SmartVisualizer backend
+# Defines two services: the Express API + the BullMQ worker.
+# Both share the same env vars — set them once in Render dashboard.
+#
+# Deploy: connect this GitHub repo in Render → "New Blueprint" → it reads this file.
+
+services:
+  # ── API server ────────────────────────────────────────────────────────────
+  - type: web
+    name: smartvisualizer-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node src/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LLM_MODEL
+        value: llama-3.3-70b-versatile
+      # Set these in Render dashboard — never hardcode values here:
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+
+  # ── Background worker ─────────────────────────────────────────────────────
+  - type: worker
+    name: smartvisualizer-worker
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node workers/repoWorker.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LLM_MODEL
+        value: llama-3.3-70b-versatile
+      # Same secrets — set in Render dashboard:
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false

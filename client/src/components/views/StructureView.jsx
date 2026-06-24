@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Box, Text, Center, Loader, Paper, Badge, Group,
+  Box, Text, Paper, Badge, Group,
   useMantineColorScheme,
 } from "@mantine/core";
 import * as d3 from "d3";
 import { useRepo } from "../../context/RepoContext";
 import { colorForExt } from "../../utils/extColors";
 import ExtensionLegend from "../ExtensionLegend";
+import RepoBuilder from "../animations/RepoBuilder";
 
 function formatSize(bytes) {
   if (!bytes) return "—";
@@ -63,10 +64,16 @@ export default function StructureView() {
     node
       .filter((d) => d.children)
       .append("circle")
-      .attr("r", (d) => d.r)
+      .attr("r", 0)
       .attr("fill", isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)")
       .attr("stroke", folderStroke)
       .attr("stroke-width", 1.5)
+      .transition()
+      .duration(500)
+      .delay((d) => d.depth * 80)
+      .ease(d3.easeCubicOut)
+      .attr("r", (d) => d.r)
+      .selection()
       .on("mousemove", (event, d) => {
         const rect = containerRef.current.getBoundingClientRect();
         setTooltip({
@@ -95,12 +102,18 @@ export default function StructureView() {
 
     fileNodes
       .append("circle")
-      .attr("r", (d) => d.r)
+      .attr("r", 0)
       .attr("fill", (d) => colorForExt(d.data.ext))
       .attr("fill-opacity", 0.82)
       .attr("stroke", isDark ? "rgba(0,0,0,0.3)" : "rgba(255,255,255,0.4)")
       .attr("stroke-width", 0.5)
       .style("transition", "r 0.15s ease, fill-opacity 0.15s ease")
+      .transition()
+      .duration(400)
+      .delay((d) => d.depth * 80 + 60)
+      .ease(d3.easeBackOut.overshoot(1.4))
+      .attr("r", (d) => d.r)
+      .selection()
       .on("mousemove", (event, d) => {
         const rect = containerRef.current.getBoundingClientRect();
         setTooltip({
@@ -150,9 +163,9 @@ export default function StructureView() {
 
   if (loading) {
     return (
-      <Center h={400}>
-        <Loader color="violet" />
-      </Center>
+      <Box style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 400 }}>
+        <RepoBuilder />
+      </Box>
     );
   }
 

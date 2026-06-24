@@ -1,0 +1,91 @@
+/* ── Keyframes ──────────────────────────────────────────────────── */
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-6px) scale(1.08); }
+}
+
+@keyframes slideLR {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(136px); }
+}
+
+@keyframes detectiveScan {
+  0%,  10% { transform: translateX(0px)    translateY(-50%); }
+  30%, 40% { transform: translateX(56px)   translateY(-50%); }
+  60%, 70% { transform: translateX(112px)  translateY(-50%); }
+  90%,100% { transform: translateX(0px)    translateY(-50%); }
+}
+
+@keyframes tilt {
+  0%, 100% { transform: rotate(-12deg); }
+  50%      { transform: rotate(12deg); }
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+@keyframes fillBar {
+  0%, 100% { width: 5%; }
+  50%      { width: 90%; }
+}
+
+@keyframes writingArm {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(-5deg); }
+}
+
+@keyframes textLineGrow {
+  0%   { width: 0;    opacity: 0.8; }
+  60%  { width: 70px; opacity: 0.8; }
+  80%  { width: 70px; opacity: 0.3; }
+  100% { width: 0;    opacity: 0; }
+}
+
+@keyframes hammer {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-22deg); }
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0);   opacity: 0.4; }
+  40%           { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ── Shared component classes ───────────────────────────────────── */
+
+.sv-speech-bubble {
+  border-radius: 8px;
+  padding: 3px 7px;
+  white-space: nowrap;
+  font-size: 11px;
+  display: inline-flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.sv-speech-bubble--teal {
+  background: rgba(20, 184, 166, 0.18);
+  border: 1px solid rgba(20, 184, 166, 0.35);
+}
+
+.sv-speech-bubble--red {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.sv-dot {
+  display: inline-block;
+  animation: dotBounce 1s ease-in-out infinite;
+  font-size: 10px;
+}
+
+.sv-text-line {
+  height: 3px;
+  background: rgba(124, 58, 237, 0.45);
+  border-radius: 2px;
+  width: 0;
+  animation: textLineGrow 1.8s ease-in-out infinite;
+}

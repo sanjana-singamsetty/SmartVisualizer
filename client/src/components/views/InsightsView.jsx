@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Box, Stack, Paper, Text, Badge, Group, ThemeIcon,
-  List, Loader, Center, Alert, Button, ActionIcon, Tooltip,
+  List, Alert, Button, ActionIcon, Tooltip,
   Divider, SimpleGrid,
 } from "@mantine/core";
 import {
@@ -16,6 +16,8 @@ import { Radar } from "react-chartjs-2";
 import axios from "axios";
 import { useRepo } from "../../context/RepoContext";
 import { useMantineColorScheme } from "@mantine/core";
+import DebatingAgents from "../animations/DebatingAgents";
+import RadarInspector from "../animations/RadarInspector";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, ChartTooltip, Legend);
 
@@ -186,14 +188,7 @@ export default function InsightsView() {
   return (
     <Stack gap="md">
       {/* ── Code Quality Score ─────────────────────────────────────── */}
-      {scoreLoading && (
-        <Center h={80}>
-          <Stack align="center" gap="xs">
-            <Loader size="sm" color="violet" />
-            <Text size="xs" c="dimmed">LLM judging your codebase…</Text>
-          </Stack>
-        </Center>
-      )}
+      {scoreLoading && <RadarInspector />}
       {scoreError && (
         <Alert icon={<IconAlertCircle size={14} />} color="orange" p="xs">
           {scoreError}
@@ -207,14 +202,7 @@ export default function InsightsView() {
       <Divider />
 
       {/* ── Debate ─────────────────────────────────────────────────── */}
-      {debateLoading && (
-        <Center h={200}>
-          <Stack align="center" gap="xs">
-            <Loader color="violet" />
-            <Text size="sm" c="dimmed">Two agents are debating your repo…</Text>
-          </Stack>
-        </Center>
-      )}
+      {debateLoading && <DebatingAgents />}
       {debateError && (
         <Alert icon={<IconAlertCircle size={16} />} color="red" mb="md">
           {debateError}

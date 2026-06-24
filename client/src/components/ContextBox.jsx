@@ -1,7 +1,8 @@
-import { Drawer, Stack, Text, Button, Group, Loader, Alert, Badge, Divider } from "@mantine/core";
+import { Drawer, Stack, Text, Button, Group, Alert, Badge, Divider, Box } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { useRepo } from "../context/RepoContext";
 import { useLlmQuery } from "../hooks/useLlmQuery";
+import ThinkingRobot from "./animations/ThinkingRobot";
 
 const QUESTIONS = [
   { type: "what_does_it_do", label: "What does this do?" },
@@ -75,9 +76,9 @@ export default function ContextBox() {
 
           {/* Answer area */}
           {loading && (
-            <Group justify="center" mt="md">
-              <Loader size="sm" color="violet" />
-            </Group>
+            <Box mt="md">
+              <ThinkingRobot />
+            </Box>
           )}
 
           {error && (

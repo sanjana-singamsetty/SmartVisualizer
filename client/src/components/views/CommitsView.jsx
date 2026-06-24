@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { Box, Center, Loader, Group, Button, Text, useMantineColorScheme } from "@mantine/core";
+import { Box, Group, Button, Text, useMantineColorScheme } from "@mantine/core";
 import { Bubble, getElementAtEvent } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { useRepo } from "../../context/RepoContext";
+import RepoBuilder from "../animations/RepoBuilder";
 import { parseCommits } from "../../utils/parseCommits";
 import StatCards from "../StatCards";
 
@@ -62,7 +63,7 @@ export default function CommitsView() {
 
   const resetZoom = () => chartRef.current?.resetZoom();
 
-  if (loading) return <Center h={400}><Loader color="violet" /></Center>;
+  if (loading) return <Box style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 400 }}><RepoBuilder /></Box>;
   if (!chartData) return null;
 
   const options = {

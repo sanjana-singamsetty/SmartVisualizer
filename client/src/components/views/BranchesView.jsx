@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { Box, Center, Loader, Text, Group, Badge, useMantineColorScheme } from "@mantine/core";
+import { Box, Text, Group, Badge, useMantineColorScheme } from "@mantine/core";
 import * as d3 from "d3";
 import { useRepo } from "../../context/RepoContext";
+import RepoBuilder from "../animations/RepoBuilder";
 
 /**
  * BranchesView — renders a horizontal git graph using D3.
@@ -126,7 +127,7 @@ export default function BranchesView() {
     });
   }, [repoData, isDark]);
 
-  if (loading) return <Center h={400}><Loader color="violet" /></Center>;
+  if (loading) return <Box style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 400 }}><RepoBuilder /></Box>;
   if (!repoData?.branchesData) return null;
 
   const { branches, defaultBranch } = repoData.branchesData;

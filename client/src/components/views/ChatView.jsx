@@ -11,6 +11,7 @@ import {
 } from "@tabler/icons-react";
 import { useRepo } from "../../context/RepoContext";
 import { colorForExt } from "../../utils/extColors";
+import FileDetective from "../animations/FileDetective";
 
 const API = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -278,12 +279,7 @@ export default function ChatView() {
           {loading && deepSearch && (
             <Group align="flex-start" gap="xs">
               <Avatar size="sm" color="orange" radius="xl"><IconTool size={14} /></Avatar>
-              <Paper p="sm" withBorder style={{ borderRadius: 12 }}>
-                <Group gap={6}>
-                  <Loader size="xs" color="orange" type="dots" />
-                  <Text size="xs" c="dimmed">Agent is reading files…</Text>
-                </Group>
-              </Paper>
+              <FileDetective />
             </Group>
           )}
         </Stack>

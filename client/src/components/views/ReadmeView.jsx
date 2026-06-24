@@ -1,13 +1,14 @@
 import { useState } from "react";
 import {
-  Box, Button, Group, Paper, Text, ScrollArea,
-  Loader, Center, Alert, Code, CopyButton, Tooltip, ActionIcon,
+  Box, Button, Group, Paper, Text, ScrollArea, Center,
+  Alert, Code, CopyButton, Tooltip, ActionIcon,
 } from "@mantine/core";
 import {
   IconSparkles, IconDownload, IconCopy, IconCheck, IconAlertCircle,
 } from "@tabler/icons-react";
 import axios from "axios";
 import { useRepo } from "../../context/RepoContext";
+import TypewriterWriter from "../animations/TypewriterWriter";
 
 const API = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -42,12 +43,9 @@ export default function ReadmeView() {
 
   if (loading) {
     return (
-      <Center h={300}>
-        <Box ta="center">
-          <Loader color="violet" mb="sm" />
-          <Text size="sm" c="dimmed">Generating README from repo structure…</Text>
-        </Box>
-      </Center>
+      <Box style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 300 }}>
+        <TypewriterWriter />
+      </Box>
     );
   }
 

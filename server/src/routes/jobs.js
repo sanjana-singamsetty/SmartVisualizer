@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { repoQueue } from "../services/queue.js";
 import Repo from "../models/Repo.js";
 
 const router = Router();
@@ -7,7 +6,14 @@ const router = Router();
 router.get("/:jobId", async (req, res) => {
   const { jobId } = req.params;
 
+  // On Vercel jobs are synchronous — no BullMQ queue to poll.
+  if (process.env.VERCEL) {
+    return res.status(404).json({ error: "job_not_found" });
+  }
+
   try {
+    // Lazy-import keeps queue.js (and its ioredis connection) out of Vercel cold starts.
+    const { repoQueue } = await import("../services/queue.js");
     const job = await repoQueue.getJob(jobId);
 
     if (!job) {

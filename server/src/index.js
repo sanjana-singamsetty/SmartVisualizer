@@ -18,15 +18,17 @@ const app = express();
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
   "http://localhost:4173",
-  // Add your Vercel URL here once deployed, e.g.:
-  // "https://smart-visualizer.vercel.app",
-  process.env.FRONTEND_URL, // set in Render env vars
+  process.env.FRONTEND_URL,       // explicit override (Render / custom domain)
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow requests with no origin (curl, Render health checks)
-    if (!origin || ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return cb(null, true);
+    // Same-origin requests (curl, health checks) have no Origin header — always allow.
+    if (!origin) return cb(null, true);
+    // Allow all Vercel preview + production URLs automatically.
+    if (origin.endsWith(".vercel.app") || origin.includes("vercel.app")) return cb(null, true);
+    // Allow any explicitly listed origin.
+    if (ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return cb(null, true);
     cb(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,

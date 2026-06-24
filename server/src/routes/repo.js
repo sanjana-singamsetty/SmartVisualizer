@@ -3,7 +3,14 @@ import Repo from "../models/Repo.js";
 import { parseGitHubUrl } from "../utils/parseGitHubUrl.js";
 import { getLatestSHA, parseGitHubError } from "../services/github.js";
 import { getCachedRepo } from "../services/cache.js";
-import { repoQueue } from "../services/queue.js";
+import { analyzeRepo } from "../services/analyzeRepo.js";
+
+// Only import the queue on non-Vercel environments (avoids Redis connection error on Vercel)
+let repoQueue = null;
+if (!process.env.VERCEL) {
+  const { repoQueue: q } = await import("../services/queue.js");
+  repoQueue = q;
+}
 
 const router = Router();
 
@@ -19,38 +26,43 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    // L1+L2 cache check
+    // ── Cache check (always) ──────────────────────────────────────────────
     const cached = await getCachedRepo(url);
     if (cached) {
-      // Staleness check (cheap — one API call)
       const latestSHA = await getLatestSHA(owner, repo).catch(() => null);
       if (!latestSHA || cached.latestSHA === latestSHA) {
         return res.json({ ...cached, repoId: cached._id, status: "completed" });
       }
-      // Stale — fall through to re-analyze
     }
 
-    // Check if already processing
-    const existing = await Repo.findOne({ url, status: "processing" });
+    // ── Upsert Repo doc ───────────────────────────────────────────────────
+    const doc = await Repo.findOneAndUpdate(
+      { url },
+      { url, owner, name: repo, status: "processing", stage: "" },
+      { upsert: true, new: true }
+    );
+    const repoId = doc._id.toString();
+
+    // ── Vercel: synchronous processing ────────────────────────────────────
+    if (process.env.VERCEL) {
+      const result = await analyzeRepo({ url, owner, repo, repoId });
+      return res.json({ ...result, repoId, status: "completed" });
+    }
+
+    // ── Non-Vercel: queue via BullMQ ──────────────────────────────────────
+    // Check if already queued
+    const existing = await Repo.findOne({ url, status: "processing", _id: { $ne: doc._id } });
     if (existing) {
       return res.json({ jobId: existing._id.toString(), status: "processing" });
     }
 
-    // Enqueue new analysis job
-    const doc = await Repo.findOneAndUpdate(
-      { url },
-      { url, owner, name: repo, status: "processing" },
-      { upsert: true, new: true }
-    );
-
-    const job = await repoQueue.add("analyzeRepo", { url, owner, repo, repoId: doc._id.toString() });
-
-    return res.json({ jobId: job.id, repoId: doc._id.toString(), status: "processing" });
+    const job = await repoQueue.add("analyzeRepo", { url, owner, repo, repoId });
+    return res.json({ jobId: job.id, repoId, status: "processing" });
   } catch (err) {
     const ghErr = parseGitHubError(err);
     if (ghErr.error !== "github_error") return res.status(400).json(ghErr);
-    console.error(err);
-    return res.status(500).json({ error: "internal_error" });
+    console.error("[repo route]", err.message);
+    return res.status(500).json({ error: "internal_error", message: err.message });
   }
 });
 

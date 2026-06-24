@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import ReactMarkdown from "react-markdown";
 import {
   Box, Stack, Paper, Text, TextInput, ActionIcon,
   Group, ScrollArea, Avatar, Loader, Badge, Collapse,
@@ -243,11 +244,20 @@ export default function ChatView() {
                 <Paper p="sm" withBorder={msg.role === "assistant"}
                   bg={msg.role === "user" ? "violet.8" : undefined}
                   style={{ borderRadius: 12 }}>
-                  <Text size="sm" style={{ lineHeight: 1.65, whiteSpace: "pre-wrap" }}
-                    c={msg.isError ? "red.4" : undefined}>
-                    {msg.content}
-                    {msg.streaming && <Loader size={10} color="violet" type="dots" ml={4} />}
-                  </Text>
+                  {msg.role === "user" ? (
+                    <Text size="sm" style={{ lineHeight: 1.65 }}>
+                      {msg.content}
+                    </Text>
+                  ) : (
+                    <Box
+                      c={msg.isError ? "red.4" : undefined}
+                      style={{ fontSize: 14, lineHeight: 1.65 }}
+                      className="md-body"
+                    >
+                      <ReactMarkdown>{msg.content || ""}</ReactMarkdown>
+                      {msg.streaming && <Loader size={10} color="violet" type="dots" ml={4} />}
+                    </Box>
+                  )}
                 </Paper>
 
                 {/* Agent trace */}
